@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Search } from '@material-ui/icons';
 import { TextField, IconButton } from '@material-ui/core';
 
-const SearchBox = ({ isOpen }) => {
+const SearchBox = ({ isOpen, onClick }) => {
   const baseStyle = {
     open: {
       width: 300,
@@ -26,7 +26,7 @@ const SearchBox = ({ isOpen }) => {
   const frameStyle = { ...baseStyle.frame, ...{ width: textStyle.width + frameWidth } };
   return (
     <div style={frameStyle}>
-      <IconButton aria-label="Search">
+      <IconButton aria-label="Search" onClick={onClick}>
         <Search style={textStyle.icon} />
       </IconButton>
 
@@ -38,4 +38,5 @@ export default SearchBox;
 
 SearchBox.propTypes = {
   isOpen: PropTypes.bool.isRequired,
+  onClick: PropTypes.func.isRequired,
 };
