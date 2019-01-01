@@ -1,10 +1,32 @@
 import React from 'react';
-// import classNames from 'classnames';
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { Search } from '@material-ui/icons';
 import { TextField, IconButton } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
 
-const SearchBox = ({ isOpen, onClick }) => {
+const useStyles = withStyles({
+  open: {
+    width: 300,
+  },
+  closed: {
+    width: 0,
+  },
+  icon: {
+    width: 40,
+    height: 40,
+  },
+  frame: {
+    border: '1px solid',
+    borderRadius: 4,
+    width: 65,
+    '&.open': {
+      width: 380,
+    },
+  },
+});
+
+const SearchBox = (props) => {
   const baseStyle = {
     open: {
       width: 300,
@@ -19,24 +41,31 @@ const SearchBox = ({ isOpen, onClick }) => {
     frame: {
       border: '1px solid',
       borderRadius: 4,
+      width: 50,
+      background: 'red',
+      '&.open': {
+        width: 380,
+      },
     },
   };
-  const textStyle = isOpen ? baseStyle.open : baseStyle.closed;
-  const frameWidth = isOpen ? 80 : 50;
-  const frameStyle = { ...baseStyle.frame, ...{ width: textStyle.width + frameWidth } };
+  const { classes, isOpen, onClick } = props;
+
+  const toggledClass = { [classes.open]: isOpen, [classes.closed]: !isOpen };
+
   return (
-    <div style={frameStyle}>
+    <div className={classNames(classes.frame, { open: isOpen })}>
       <IconButton aria-label="Search" onClick={onClick}>
-        <Search style={textStyle.icon} />
+        <Search className={classes.icon} />
       </IconButton>
 
-      <TextField style={textStyle} />
+      <TextField className={classNames(toggledClass)} />
     </div>
   );
 };
-export default SearchBox;
+export default useStyles(SearchBox);
 
 SearchBox.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClick: PropTypes.func.isRequired,
+  classes: PropTypes.any,
 };
