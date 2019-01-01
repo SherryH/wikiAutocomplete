@@ -21,8 +21,9 @@ const useStyles = withStyles({
     width: 65,
     borderRadius: '50%',
     background: '#1eaddc',
+    boxShadow: '0 10px 30px #d0d0d0',
     '&.open': {
-      borderRadius: 4,
+      borderRadius: '20%/95%',
       width: 380,
     },
   },
@@ -34,13 +35,15 @@ const SearchBox = (props) => {
   const toggledClass = { [classes.open]: isOpen, [classes.closed]: !isOpen };
 
   return (
-    <div className={classNames(classes.frame, { open: isOpen })}>
-      <IconButton aria-label="Search" onClick={onClick}>
-        <Search className={classes.icon} />
-      </IconButton>
+    <React.Fragment>
+      <div className={classNames(classes.frame, { open: isOpen })}>
+        <IconButton aria-label="Search" onClick={onClick}>
+          <Search className={classes.icon} />
+        </IconButton>
+      </div>
 
       <TextField className={classNames(toggledClass)} />
-    </div>
+    </React.Fragment>
   );
 };
 export default useStyles(SearchBox);
