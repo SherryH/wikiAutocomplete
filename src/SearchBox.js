@@ -17,37 +17,18 @@ const useStyles = withStyles({
     height: 40,
   },
   frame: {
-    border: '1px solid',
-    borderRadius: 4,
+    border: '1px solid #1eaddc',
     width: 65,
+    borderRadius: '50%',
+    background: '#1eaddc',
     '&.open': {
+      borderRadius: 4,
       width: 380,
     },
   },
 });
 
 const SearchBox = (props) => {
-  const baseStyle = {
-    open: {
-      width: 300,
-    },
-    closed: {
-      width: 0,
-    },
-    icon: {
-      width: 40,
-      height: 40,
-    },
-    frame: {
-      border: '1px solid',
-      borderRadius: 4,
-      width: 50,
-      background: 'red',
-      '&.open': {
-        width: 380,
-      },
-    },
-  };
   const { classes, isOpen, onClick } = props;
 
   const toggledClass = { [classes.open]: isOpen, [classes.closed]: !isOpen };

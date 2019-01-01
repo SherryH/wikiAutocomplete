@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 // render props, pass the states into children
 class SearchContainer extends React.Component {
   state = {
-    isOpen: true,
+    isOpen: false,
   };
 
   onClick = () => {
