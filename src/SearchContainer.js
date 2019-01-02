@@ -13,11 +13,18 @@ class SearchContainer extends React.Component {
     }));
   };
 
+  clickOutside = () => {
+    this.setState({
+      isOpen: false,
+    });
+  };
+
   getStateAndHelpers() {
     const { isOpen } = this.state;
     return {
       isOpen,
       onClick: this.onClick,
+      clickOutside: this.clickOutside,
     };
   }
 

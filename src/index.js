@@ -1,9 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import classNames from 'classnames';
-import { withStyles, MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import SearchBox from './SearchBox';
-import SearchContainer from './SearchContainer';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import SearchComponent from './SearchComponent';
 
 const theme = createMuiTheme({
   overrides: {
@@ -20,29 +18,10 @@ const theme = createMuiTheme({
   },
 });
 
-const Index = ({ classes }) => (
+const Index = () => (
   <MuiThemeProvider theme={theme}>
-    <SearchContainer>
-      {({ isOpen, onClick }) => (
-        <div className={classNames(classes.root, { open: isOpen })}>
-          <SearchBox isOpen={isOpen} onClick={onClick} />
-        </div>
-      )}
-    </SearchContainer>
+    <SearchComponent />
   </MuiThemeProvider>
 );
 
-const StyledIndex = withStyles({
-  root: {
-    width: '100vw',
-    height: '100vh',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    '&.open': {
-      background: '#1eaddc',
-    },
-  },
-})(Index);
-
-ReactDOM.render(<StyledIndex />, document.getElementById('app'));
+ReactDOM.render(<Index />, document.getElementById('app'));

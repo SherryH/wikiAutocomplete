@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { Search } from '@material-ui/icons';
 import { TextField, IconButton, SvgIcon } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+import onClickOutside from 'react-onclickoutside';
 
 const primaryBlue = '#1eaddc';
 
@@ -58,10 +59,17 @@ const SearchBox = (props) => {
     </React.Fragment>
   );
 };
-export default useStyles(SearchBox);
+export default onClickOutside(useStyles(SearchBox), {
+  handleClickOutside(instance) {
+    return () => {
+      instance.props.clickOutside();
+    };
+  },
+});
 
 SearchBox.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClick: PropTypes.func.isRequired,
+  clickOutside: PropTypes.func.isRequired,
   classes: PropTypes.any,
 };
