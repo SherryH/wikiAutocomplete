@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import classNames from 'classnames';
 import { withStyles, MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import SearchBox from './SearchBox';
 import SearchContainer from './SearchContainer';
@@ -21,11 +22,13 @@ const theme = createMuiTheme({
 
 const Index = ({ classes }) => (
   <MuiThemeProvider theme={theme}>
-    <div className={classes.root}>
-      <SearchContainer>
-        {({ isOpen, onClick }) => <SearchBox isOpen={isOpen} onClick={onClick} />}
-      </SearchContainer>
-    </div>
+    <SearchContainer>
+      {({ isOpen, onClick }) => (
+        <div className={classNames(classes.root, { open: isOpen })}>
+          <SearchBox isOpen={isOpen} onClick={onClick} />
+        </div>
+      )}
+    </SearchContainer>
   </MuiThemeProvider>
 );
 
@@ -36,6 +39,9 @@ const StyledIndex = withStyles({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    '&.open': {
+      background: '#1eaddc',
+    },
   },
 })(Index);
 

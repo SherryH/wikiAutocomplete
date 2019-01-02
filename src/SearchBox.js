@@ -2,29 +2,42 @@ import React from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { Search } from '@material-ui/icons';
-import { TextField, IconButton } from '@material-ui/core';
+import { TextField, IconButton, SvgIcon } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+
+const primaryBlue = '#1eaddc';
 
 const useStyles = withStyles({
   open: {
-    width: 300,
+    flex: 1,
+    fontSize: 20,
+    border: 0,
+    '&:focus': {
+      outline: 'none',
+    },
   },
   closed: {
-    width: 0,
+    display: 'none',
   },
   icon: {
     width: 40,
     height: 40,
+    '&.open': {
+      fill: '#1eaddc',
+    },
   },
-  frame: {
+  wrapper: {
     border: '1px solid #1eaddc',
     width: 65,
     borderRadius: '50%',
     background: '#1eaddc',
     boxShadow: '0 10px 30px #d0d0d0',
     '&.open': {
+      display: 'flex',
       borderRadius: '20%/95%',
       width: 380,
+      background: 'white',
+      padding: '2px 30px',
     },
   },
 });
@@ -36,13 +49,12 @@ const SearchBox = (props) => {
 
   return (
     <React.Fragment>
-      <div className={classNames(classes.frame, { open: isOpen })}>
+      <div className={classNames(classes.wrapper, { open: isOpen })}>
         <IconButton aria-label="Search" onClick={onClick}>
-          <Search className={classes.icon} />
+          <Search className={classNames(classes.icon, { open: isOpen })} />
         </IconButton>
+        <input className={classNames(toggledClass)} placeholder="Start Wiki Search..." />
       </div>
-
-      <TextField className={classNames(toggledClass)} />
     </React.Fragment>
   );
 };
