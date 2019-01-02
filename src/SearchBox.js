@@ -20,6 +20,9 @@ const useStyles = withStyles({
   closed: {
     display: 'none',
   },
+  show: {
+    display: 'block',
+  },
   icon: {
     width: 40,
     height: 40,
@@ -35,7 +38,7 @@ const useStyles = withStyles({
     boxShadow: '0 10px 30px #d0d0d0',
     '&.open': {
       display: 'flex',
-      borderRadius: '20%/95%',
+      borderRadius: '20%/110%',
       width: 380,
       background: 'white',
       padding: '2px 30px',
@@ -51,10 +54,21 @@ const SearchBox = (props) => {
   return (
     <React.Fragment>
       <div className={classNames(classes.wrapper, { open: isOpen })}>
-        <IconButton aria-label="Search" onClick={onClick}>
+        <IconButton
+          aria-label="Show autocomplete"
+          onClick={onClick}
+          className={classNames({ [classes.show]: !isOpen, [classes.closed]: isOpen })}
+        >
           <Search className={classNames(classes.icon, { open: isOpen })} />
         </IconButton>
         <input className={classNames(toggledClass)} placeholder="Start Wiki Search..." />
+        <IconButton
+          aria-label="Search"
+          onClick={onClick}
+          className={classNames({ [classes.show]: isOpen, [classes.closed]: !isOpen })}
+        >
+          <Search className={classNames(classes.icon, { open: isOpen })} />
+        </IconButton>
       </div>
     </React.Fragment>
   );
