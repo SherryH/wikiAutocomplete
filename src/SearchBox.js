@@ -36,6 +36,7 @@ const useStyles = withStyles({
     borderRadius: '50%',
     background: '#1eaddc',
     boxShadow: '0 10px 30px #d0d0d0',
+    transition: '0.15s ease width',
     '&.open': {
       display: 'flex',
       borderRadius: '20%/110%',

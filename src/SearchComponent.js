@@ -23,6 +23,7 @@ const useStyles = withStyles({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    transition: '2s ease all',
     '&.open': {
       background: '#1eaddc',
     },
