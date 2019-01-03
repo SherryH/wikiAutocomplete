@@ -6,10 +6,10 @@ import SearchContainer from './SearchContainer';
 
 const SearchComponent = ({ classes }) => (
   <SearchContainer>
-    {({ isOpen, onClick, clickOutside }) => (
+    {({ isOpen, ...otherProps }) => (
       <React.Fragment>
         <div className={classNames(classes.root, { open: isOpen })}>
-          <SearchBox isOpen={isOpen} onClick={onClick} clickOutside={clickOutside} />
+          <SearchBox isOpen={isOpen} {...otherProps} />
         </div>
       </React.Fragment>
     )}

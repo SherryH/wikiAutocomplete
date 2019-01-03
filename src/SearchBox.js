@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Search } from '@material-ui/icons';
 import { TextField, IconButton, SvgIcon } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import onClickOutside from 'react-onclickoutside';
+import onhandleClickOutside from 'react-onclickoutside';
 
 const primaryBlue = '#1eaddc';
 
@@ -48,7 +48,9 @@ const useStyles = withStyles({
 });
 
 const SearchBox = (props) => {
-  const { classes, isOpen, onClick } = props;
+  const {
+    classes, isOpen, onClick, searchWiki,
+  } = props;
 
   const toggledClass = { [classes.open]: isOpen, [classes.closed]: !isOpen };
 
@@ -65,7 +67,7 @@ const SearchBox = (props) => {
         <input className={classNames(toggledClass)} placeholder="Start Wiki Search..." />
         <IconButton
           aria-label="Search"
-          onClick={onClick}
+          onClick={searchWiki}
           className={classNames({ [classes.show]: isOpen, [classes.closed]: !isOpen })}
         >
           <Search className={classNames(classes.icon, { open: isOpen })} />
@@ -74,10 +76,10 @@ const SearchBox = (props) => {
     </React.Fragment>
   );
 };
-export default onClickOutside(useStyles(SearchBox), {
-  handleClickOutside(instance) {
+export default onhandleClickOutside(useStyles(SearchBox), {
+  handlehandleClickOutside(instance) {
     return () => {
-      instance.props.clickOutside();
+      instance.props.handleClickOutside();
     };
   },
 });
@@ -85,6 +87,6 @@ export default onClickOutside(useStyles(SearchBox), {
 SearchBox.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClick: PropTypes.func.isRequired,
-  clickOutside: PropTypes.func.isRequired,
+  handleClickOutside: PropTypes.func.isRequired,
   classes: PropTypes.any,
 };
