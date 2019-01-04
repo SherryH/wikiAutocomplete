@@ -1,6 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import jsonp from 'jsonp';
+import { debounceTime } from 'rxjs/operators';
+
+// Define Observables
+// const searchInput = document.getElementById('searchInput');
+// console.log('searchInput', searchInput);
+// const searchInput$ = fromEvent(searchInput, 'click');
 
 // render props, pass the states into children
 class SearchContainer extends React.Component {
@@ -25,10 +31,8 @@ class SearchContainer extends React.Component {
   getJsonpAsync = (term, url) => new Promise((resolve, reject) => {
     jsonp(url, (err, data) => {
       if (err) {
-        console.log('err', err);
         reject(err);
       }
-      console.log('data', data);
       resolve(data[1]);
     });
   });
@@ -39,6 +43,12 @@ class SearchContainer extends React.Component {
     this.getJsonpAsync(term, url).then(data => console.log('auto dropdown', data));
   };
 
+  onChange = (searchInput$) => {
+    searchInput$.pipe(debounceTime(500)).subscribe((event) => {
+      console.log('data is event? YES!', event.key);
+    });
+  };
+
   getStateAndHelpers() {
     const { isOpen } = this.state;
     return {
@@ -46,11 +56,13 @@ class SearchContainer extends React.Component {
       onClick: this.onClick,
       handleClickOutside: this.handleClickOutside,
       searchWiki: this.searchWiki,
+      onChange: this.onChange,
     };
   }
 
   render() {
     const { children } = this.props;
+
     return children(this.getStateAndHelpers());
   }
 }

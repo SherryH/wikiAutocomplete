@@ -5,6 +5,7 @@ import { Search } from '@material-ui/icons';
 import { TextField, IconButton, SvgIcon } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import onhandleClickOutside from 'react-onclickoutside';
+import { fromEvent } from 'rxjs';
 
 const primaryBlue = '#1eaddc';
 
@@ -49,11 +50,17 @@ const useStyles = withStyles({
 
 const SearchBox = (props) => {
   const {
-    classes, isOpen, onClick, searchWiki,
+    classes, isOpen, onClick, searchWiki, onChange,
   } = props;
 
   const toggledClass = { [classes.open]: isOpen, [classes.closed]: !isOpen };
 
+  // reference to SearchBox
+  const searchInput = document.getElementById('searchInput');
+  // let searchInputRef = React.createRef();
+  // const searchInput = searchInputRef.current;
+  // console.log('searchInput', searchInput, searchInputRef);
+  const searchInput$ = fromEvent(searchInput, 'keyup');
   return (
     <React.Fragment>
       <div className={classNames(classes.wrapper, { open: isOpen })}>
@@ -64,7 +71,15 @@ const SearchBox = (props) => {
         >
           <Search className={classNames(classes.icon, { open: isOpen })} />
         </IconButton>
-        <input className={classNames(toggledClass)} placeholder="Start Wiki Search..." />
+        <input
+          id="searchInput"
+          // ref={searchInputRef}
+          onChange={(event) => {
+            onChange(searchInput$);
+          }}
+          className={classNames(toggledClass)}
+          placeholder="Start Wiki Search..."
+        />
         <IconButton
           aria-label="Search"
           onClick={searchWiki}
