@@ -50,13 +50,15 @@ const useStyles = withStyles({
 
 const SearchBox = (props) => {
   const {
-    classes, isOpen, onClick, searchWiki, onChange,
+    classes, isOpen, onClick, searchWiki, onChange, searchValue, getSearchInput,
   } = props;
 
   const toggledClass = { [classes.open]: isOpen, [classes.closed]: !isOpen };
 
   // reference to SearchBox
   const searchInput = document.getElementById('searchInput');
+  getSearchInput(searchInput);
+  // TODO: investigate how to refer to DOM using ref. Where to refactor to
   // let searchInputRef = React.createRef();
   // const searchInput = searchInputRef.current;
   // console.log('searchInput', searchInput, searchInputRef);
@@ -75,8 +77,9 @@ const SearchBox = (props) => {
           id="searchInput"
           // ref={searchInputRef}
           onChange={(event) => {
-            onChange(searchInput$);
+            onChange(event, searchInput$);
           }}
+          value={searchValue}
           className={classNames(toggledClass)}
           placeholder="Start Wiki Search..."
         />
