@@ -3,25 +3,22 @@ import PropTypes from 'prop-types';
 import jsonp from 'jsonp';
 import { from, Observable } from 'rxjs';
 import {
-  debounceTime, distinctUntilChanged, map, mergeAll, switchMap,
+  debounceTime, distinctUntilChanged, map, filter, switchMap,
 } from 'rxjs/operators';
 
-// Define Observables
-// const searchInput = document.getElementById('searchInput');
-// console.log('searchInput', searchInput);
-// const searchInput$ = fromEvent(searchInput, 'click');
-
-// render props, pass the states into children
 class SearchContainer extends React.Component {
   constructor(props) {
     super(props);
     this.searchInput$ = null;
     this.searchInputSubscriber = null;
+    this.wikiSubscriber = null;
+    this.searchInputRef = null;
   }
 
   state = {
     isOpen: false,
     searchValue: '',
+    dropdownData: [],
     searchInput: null,
   };
 
@@ -37,8 +34,6 @@ class SearchContainer extends React.Component {
     });
   };
 
-  // create a Search handler, make fetch request to wiki, get response
-  // then use onChange
   getJsonpAsync = (term, url) => new Promise((resolve, reject) => {
     jsonp(url, (err, data) => {
       if (err) {
@@ -49,18 +44,15 @@ class SearchContainer extends React.Component {
   });
 
   searchWiki = (term) => {
-    // const term = 'Harari';
-    const url = `https://en.wikipedia.org/w/api.php?action=opensearch&format=json&formatversion=2&search=${term}&namespace=0&limit=10&suggest=true`;
-    return this.getJsonpAsync(term, url).then(data => console.log('auto dropdown', data));
+    const url = `https://en.wikipedia.org/w/index.php?search=${encodeURI(term)}`;
+    window.open(url, '_blank');
   };
 
   getWikiObservable = (term) => {
-    console.log('getWiki called');
     let cancelled = false;
     return Observable.create((observer) => {
       const url = `https://en.wikipedia.org/w/api.php?action=opensearch&format=json&formatversion=2&search=${term}&namespace=0&limit=10&suggest=true`;
       const jsonPFunc = function (error, jsonpData) {
-        console.log('jsonpData', jsonpData[1]);
         if (error) observer.error(error);
         if (!cancelled) {
           observer.next(jsonpData[1]);
@@ -80,57 +72,54 @@ class SearchContainer extends React.Component {
       this.searchInput$ = searchInput$;
     }
     this.setState({ searchValue: event.target.value }, () => {
-      // console.log('repeat?', this.searchInput$);
-      // this.searchInput$.pipe(debounceTime(500)).subscribe((event) => {
-      //   console.log('data is event? YES!', event.key);
-      //   // get input.value() from SearchBox
-      //   console.log('input value', this.state.searchValue);
-      //   // send input.value() to searchWiki
-      //   // from(searchWiki()) -> changes to observable
-      // });
     });
   };
 
-  getSearchInput = (searchInput) => {
-    console.log('searchInput passed from SearchBox', searchInput);
-    // this.setState({ searchInput });
+  selectDropdown = (dropdownList) => {
+    this.setState({searchValue: dropdownList, dropdownData:[]})
+    // TODO: cursor still not displayed 
+    if (this.searchInputRef) this.searchInputRef.current.focus() 
+  }
+  getSearchInput = (searchInputRef) => {
+    // TODO: find the best place to define searchInputRef
+    // passed through in onChange or another place? 
+    // Note: constructor() doesnt work as SearchBox not yet exist when SearchContainer defined
   };
 
   componentWillUnmount() {
     this.searchInputSubscriber.unsubscribe();
+    this.wikiSubscriber.unsubscribe();
   }
 
   componentDidUpdate() {
     if (!this.searchInput$) return;
-    console.log('how many?');
-    const wiki$ = this.getWikiObservable(this.state.searchValue);
-    wiki$.subscribe((data) => {
-      console.log('wikidata', data);
-    });
     this.searchInputSubscriber = this.searchInput$
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
-        switchMap(() => this.getWikiObservable(this.state.searchValue)),
+        filter(()=>{
+          return this.state.searchValue.length > 0
+        }),
+        switchMap(() => {
+          this.wikiSubscriber = this.getWikiObservable(this.state.searchValue);
+          return this.wikiSubscriber;
+        }),
       )
-      .subscribe((wikiData) => {
+      .subscribe((dropdownData) => {
+        // TODO: why from(promise) or(promise) doesnt work?
         // from(this.searchWiki(this.state.searchValue))
         //   .pipe(mergeAll())
         //   .subscribe((data) => {
         //     console.log('returned wiki data', data);
         //   });
+        console.log('TODO: observable subscribe run increments', this.state.searchValue)
 
-        // console.log('data is event? YES!', event.key);
-        // get input.value() from SearchBox
-        console.log('input value', this.state.searchValue);
-        console.log('dropdown', wikiData);
-        // send input.value() to searchWiki
-        // from(searchWiki()) -> changes to observable
+        this.setState({ dropdownData });
       });
   }
 
   getStateAndHelpers() {
-    const { isOpen, searchValue } = this.state;
+    const { isOpen, searchValue, dropdownData } = this.state;
     return {
       isOpen,
       onClick: this.onClick,
@@ -139,6 +128,8 @@ class SearchContainer extends React.Component {
       onChange: this.onChange,
       searchValue,
       getSearchInput: this.getSearchInput,
+      dropdownData,
+      selectDropdown: this.selectDropdown
     };
   }
 

@@ -4,8 +4,13 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import SearchComponent from './SearchComponent';
 
 const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: '#1eaddc',
+    },
+  },
   overrides: {
-    // Name of the component ⚛️ / style sheet
+    // Name of the component ⚛️ / style sheet to override
     MuiSvgIcon: {
       // Name of the rule
       root: {
