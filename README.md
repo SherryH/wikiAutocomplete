@@ -4,6 +4,8 @@ This is a simple autocomplete component that gives Wikipedia search suggestions 
 
 This autocomplete widget design was taken from inspiration of [this codepen](https://codepen.io/himalayasingh/pen/NLmeyJ)
 
+![App gif](https://github.com/SherryH/wikiAutocomplete/blob/master/wikiAutocomplete.gif)
+
 # Technology
 
 - React
