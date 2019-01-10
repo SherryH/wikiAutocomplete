@@ -6,16 +6,9 @@ import { TextField, IconButton, SvgIcon } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import onhandleClickOutside from 'react-onclickoutside';
 import { fromEvent } from 'rxjs';
+import DropdownSuggestion from './DropdownSuggestion';
 
 const primaryBlue = '#1eaddc';
-
-const DropdownSuggestion = ({ classes, dropdownData, toggledClass, selectDropdown}) => (
-  <ul className={classNames(toggledClass, { [classes.dropdownWrapper]: true })}>
-    {dropdownData.map(dropdownList => (
-      <li key={dropdownList} onClick={()=>selectDropdown(dropdownList)}>{dropdownList}</li>
-    ))}
-  </ul>
-);
 
 const useStyles = withStyles({
   open: {
@@ -95,23 +88,26 @@ const SearchBox = (props) => {
     searchValue,
     getSearchInput,
     dropdownData,
-    selectDropdown
+    selectDropdown,
   } = props;
-
 
   const toggledClass = { [classes.open]: isOpen, [classes.closed]: !isOpen };
 
   // reference to SearchBox
   const searchInput = document.getElementById('searchInput');
   // TODO: investigate how to refer to DOM using ref. Where to refactor to
-  let searchInputRef = React.createRef(); 
+  const searchInputRef = React.createRef();
   getSearchInput(searchInputRef);
   // const searchInput = searchInputRef.current;
   // console.log('searchInput', searchInput, searchInputRef);
   const searchInput$ = fromEvent(searchInput, 'keyup');
   return (
     <React.Fragment>
-      <form className={classNames(classes.wrapper, { open: isOpen })} onSubmit={()=>searchWiki(searchValue)} autoComplete="off">
+      <form
+        className={classNames(classes.wrapper, { open: isOpen })}
+        onSubmit={() => searchWiki(searchValue)}
+        autoComplete="off"
+      >
         <IconButton
           aria-label="Show autocomplete"
           onClick={onClick}
@@ -140,7 +136,7 @@ const SearchBox = (props) => {
         )}
         <IconButton
           aria-label="Search"
-          onClick={()=>searchWiki(searchValue)}
+          onClick={() => searchWiki(searchValue)}
           className={classNames({ [classes.show]: isOpen, [classes.closed]: !isOpen })}
         >
           <Search className={classNames(classes.icon, { open: isOpen })} />
