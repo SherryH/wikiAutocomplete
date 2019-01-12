@@ -109,7 +109,7 @@ const SearchBox = (props) => {
         autoComplete="off"
       >
         <IconButton
-          id="show-autocomplete"
+          data-testid="show-autocomplete"
           aria-label="Show autocomplete"
           onClick={onClick}
           className={classNames({ [classes.show]: !isOpen, [classes.closed]: isOpen })}

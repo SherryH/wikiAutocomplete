@@ -22,17 +22,45 @@ class SearchContainer extends React.Component {
     searchInput: null,
   };
 
+
+  componentDidUpdate() {
+    const { searchValue } = this.state;
+    console.log('componentDidUpdate in test? ', this.searchInput$);
+    if (!this.searchInput$) return;
+    this.searchInputSubscriber = this.searchInput$
+      .pipe(
+        debounceTime(500),
+        distinctUntilChanged(),
+        filter(() => searchValue.length > 0),
+        switchMap(() => {
+          this.wikiSubscriber = this.getWikiObservable(searchValue);
+          return this.wikiSubscriber;
+        }),
+      )
+      .subscribe((dropdownData) => {
+        // TODO: why from(promise) or(promise) doesnt work?
+        // from(this.searchWiki(this.state.searchValue))
+        //   .pipe(mergeAll())
+        //   .subscribe((data) => {
+        //     console.log('returned wiki data', data);
+        //   });
+        console.log('TODO: observable subscribe run increments', this.state.searchValue);
+
+        this.setState({ dropdownData });
+      });
+  }
+
+  componentWillUnmount() {
+    if (this.searchInputSubscriber) this.searchInputSubscriber.unsubscribe();
+    if (this.wikiSubscriber) this.wikiSubscriber.unsubscribe();
+  }
+
   onClick = () => {
     this.setState(({ isOpen }) => ({
       isOpen: !isOpen,
     }));
   };
 
-  handleClickOutside = () => {
-    this.setState({
-      isOpen: false,
-    });
-  };
 
   getJsonpAsync = (term, url) => new Promise((resolve, reject) => {
     jsonp(url, (err, data) => {
@@ -43,10 +71,6 @@ class SearchContainer extends React.Component {
     });
   });
 
-  searchWiki = (term) => {
-    const url = `https://en.wikipedia.org/w/index.php?search=${encodeURI(term)}`;
-    window.open(url, '_blank');
-  };
 
   getWikiObservable = (term) => {
     let cancelled = false;
@@ -76,47 +100,17 @@ class SearchContainer extends React.Component {
   };
 
   selectDropdown = (dropdownList) => {
-    this.setState({searchValue: dropdownList, dropdownData:[]})
-    // TODO: cursor still not displayed 
-    if (this.searchInputRef) this.searchInputRef.current.focus() 
+    this.setState({ searchValue: dropdownList, dropdownData: [] });
+    // TODO: cursor still not displayed
+    if (this.searchInputRef) this.searchInputRef.current.focus();
   }
+
   getSearchInput = (searchInputRef) => {
     // TODO: find the best place to define searchInputRef
-    // passed through in onChange or another place? 
+    // passed through in onChange or another place?
     // Note: constructor() doesnt work as SearchBox not yet exist when SearchContainer defined
   };
 
-  componentWillUnmount() {
-    this.searchInputSubscriber.unsubscribe();
-    this.wikiSubscriber.unsubscribe();
-  }
-
-  componentDidUpdate() {
-    if (!this.searchInput$) return;
-    this.searchInputSubscriber = this.searchInput$
-      .pipe(
-        debounceTime(500),
-        distinctUntilChanged(),
-        filter(()=>{
-          return this.state.searchValue.length > 0
-        }),
-        switchMap(() => {
-          this.wikiSubscriber = this.getWikiObservable(this.state.searchValue);
-          return this.wikiSubscriber;
-        }),
-      )
-      .subscribe((dropdownData) => {
-        // TODO: why from(promise) or(promise) doesnt work?
-        // from(this.searchWiki(this.state.searchValue))
-        //   .pipe(mergeAll())
-        //   .subscribe((data) => {
-        //     console.log('returned wiki data', data);
-        //   });
-        console.log('TODO: observable subscribe run increments', this.state.searchValue)
-
-        this.setState({ dropdownData });
-      });
-  }
 
   getStateAndHelpers() {
     const { isOpen, searchValue, dropdownData } = this.state;
@@ -129,9 +123,20 @@ class SearchContainer extends React.Component {
       searchValue,
       getSearchInput: this.getSearchInput,
       dropdownData,
-      selectDropdown: this.selectDropdown
+      selectDropdown: this.selectDropdown,
     };
   }
+
+  searchWiki = (term) => {
+    const url = `https://en.wikipedia.org/w/index.php?search=${encodeURI(term)}`;
+    window.open(url, '_blank');
+  };
+
+  handleClickOutside = () => {
+    this.setState({
+      isOpen: false,
+    });
+  };
 
   render() {
     const { children } = this.props;
