@@ -109,6 +109,7 @@ const SearchBox = (props) => {
         autoComplete="off"
       >
         <IconButton
+          id="show-autocomplete"
           aria-label="Show autocomplete"
           onClick={onClick}
           className={classNames({ [classes.show]: !isOpen, [classes.closed]: isOpen })}
@@ -124,7 +125,6 @@ const SearchBox = (props) => {
           value={searchValue}
           className={classNames(toggledClass)}
           placeholder="Start Wiki Search..."
-          autoFocus
         />
         {dropdownData && dropdownData.length > 0 && (
           <DropdownSuggestion
