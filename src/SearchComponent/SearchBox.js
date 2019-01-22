@@ -118,6 +118,7 @@ const SearchBox = (props) => {
         </IconButton>
         <input
           id="searchInput"
+          data-testid="searchInput"
           ref={searchInputRef}
           onChange={(event) => {
             onChange(event, searchInput$);

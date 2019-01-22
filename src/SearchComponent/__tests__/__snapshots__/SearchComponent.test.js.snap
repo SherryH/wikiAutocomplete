@@ -181,3 +181,81 @@ exports[`SearchComponent opened autocomplete input renders correctly 1`] = `
   </form>
 </div>
 `;
+
+exports[`SearchComponent: renders search results into dropdown suggestions 1`] = `
+<div
+  class="SearchComponent-root-1"
+>
+  <form
+    autocomplete="off"
+    class="SearchBox-wrapper-6"
+  >
+    <button
+      aria-label="Show autocomplete"
+      class="MuiButtonBase-root-14 MuiIconButton-root-8 SearchBox-show-4"
+      data-testid="show-autocomplete"
+      tabindex="0"
+      type="button"
+    >
+      <span
+        class="MuiIconButton-label-13"
+      >
+        <svg
+          aria-hidden="true"
+          class="MuiSvgIcon-root-17 SearchBox-icon-5"
+          focusable="false"
+          role="presentation"
+          viewBox="0 0 24 24"
+        >
+          <path
+            d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"
+          />
+          <path
+            d="M0 0h24v24H0z"
+            fill="none"
+          />
+        </svg>
+      </span>
+      <span
+        class="MuiTouchRipple-root-26"
+      />
+    </button>
+    <input
+      class="SearchBox-closed-3"
+      data-testid="searchInput"
+      id="searchInput"
+      placeholder="Start Wiki Search..."
+      value=""
+    />
+    <button
+      aria-label="Search"
+      class="MuiButtonBase-root-14 MuiIconButton-root-8 SearchBox-closed-3"
+      tabindex="0"
+      type="button"
+    >
+      <span
+        class="MuiIconButton-label-13"
+      >
+        <svg
+          aria-hidden="true"
+          class="MuiSvgIcon-root-17 SearchBox-icon-5"
+          focusable="false"
+          role="presentation"
+          viewBox="0 0 24 24"
+        >
+          <path
+            d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"
+          />
+          <path
+            d="M0 0h24v24H0z"
+            fill="none"
+          />
+        </svg>
+      </span>
+      <span
+        class="MuiTouchRipple-root-26"
+      />
+    </button>
+  </form>
+</div>
+`;

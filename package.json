@@ -6,7 +6,8 @@
   "scripts": {
     "start": "webpack-dev-server --open --hot --mode development",
     "build": "webpack --mode production",
-    "test": "jest"
+    "test": "jest",
+    "deploy": "npm run build && aws s3 cp dist/ s3://sherryhsu.name --recursive"
   },
   "author": "",
   "license": "ISC",

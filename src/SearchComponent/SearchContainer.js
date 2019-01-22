@@ -13,6 +13,7 @@ class SearchContainer extends React.Component {
     this.searchInputSubscriber = null;
     this.wikiSubscriber = null;
     this.searchInputRef = null;
+    console.log('constructor called');
   }
 
   state = {
@@ -83,6 +84,7 @@ class SearchContainer extends React.Component {
           observer.complete();
         }
       };
+      console.log('getWikiObservable called');
       jsonp(url, jsonPFunc);
 
       return function dispose() {
@@ -95,6 +97,7 @@ class SearchContainer extends React.Component {
     if (!this.searchInput$) {
       this.searchInput$ = searchInput$;
     }
+    console.log('onChange called');
     this.setState({ searchValue: event.target.value }, () => {
     });
   };
