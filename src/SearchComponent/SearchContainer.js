@@ -24,7 +24,7 @@ class SearchContainer extends React.Component {
   };
 
 
-  componentDidUpdate() {
+  xcomponentDidMount() {
     const { searchValue } = this.state;
     console.log('componentDidUpdate in test? ', this.searchInput$);
     if (!this.searchInput$) return;
@@ -51,7 +51,7 @@ class SearchContainer extends React.Component {
       });
   }
 
-  componentWillUnmount() {
+  xcomponentWillUnmount() {
     if (this.searchInputSubscriber) this.searchInputSubscriber.unsubscribe();
     if (this.wikiSubscriber) this.wikiSubscriber.unsubscribe();
   }
@@ -114,6 +114,10 @@ class SearchContainer extends React.Component {
     // Note: constructor() doesnt work as SearchBox not yet exist when SearchContainer defined
   };
 
+  setDropdownData = (dropdownData) => {
+    this.setState({ dropdownData });
+  }
+
 
   getStateAndHelpers() {
     const { isOpen, searchValue, dropdownData } = this.state;
@@ -126,6 +130,7 @@ class SearchContainer extends React.Component {
       searchValue,
       getSearchInput: this.getSearchInput,
       dropdownData,
+      setDropdownData: this.setDropdownData,
       selectDropdown: this.selectDropdown,
     };
   }
