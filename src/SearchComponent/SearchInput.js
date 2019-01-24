@@ -9,26 +9,24 @@ import jsonp from 'jsonp';
 
 const input$ = new Subject();
 
-// substitude this input into SearchContainer and make sure it still works
-// then slowly refactor to use subject
-
 class SearchInput extends React.PureComponent {
   state = {
     searchValue: '',
-  }
+  };
 
   componentDidMount() {
-    const { searchValue } = this.state;
+    // const { searchValue } = this.state;
     const { setDropdownData } = this.props;
     input$
       .pipe(
-        debounceTime(500),
+        filter(searchValue => searchValue.length > 0),
         distinctUntilChanged(),
-        filter(() => searchValue.length > 0),
-        switchMap(() => this.getJsonpAsync(searchValue)),
+        debounceTime(500),
       )
-      .subscribe((dropdownData) => {
-        setDropdownData(dropdownData);
+      .subscribe((searchValue) => {
+        this.getJsonpAsync(searchValue).then((dropdownData) => {
+          setDropdownData(dropdownData);
+        });
       });
   }
 
@@ -37,7 +35,7 @@ class SearchInput extends React.PureComponent {
       const { searchValue } = this.state;
       input$.next(searchValue);
     });
-  }
+  };
 
   getJsonpAsync = term => new Promise((resolve, reject) => {
     const url = `https://en.wikipedia.org/w/api.php?action=opensearch&format=json&formatversion=2&search=${term}&namespace=0&limit=10&suggest=true`;
@@ -49,11 +47,13 @@ class SearchInput extends React.PureComponent {
     });
   });
 
+  // onClick of a dropdown search result, SearchContainer.selectDropdown
+  // set the selectDropdown to be the state.searchValue here
+  // setState triggered by parent component SearchContainer.js
+  // componentWillReceiveProps! see what the current impl is
 
   render() {
-    const {
-      toggledClass,
-    } = this.props;
+    const { toggledClass } = this.props;
     const { searchValue } = this.state;
     return (
       <input
@@ -70,7 +70,6 @@ class SearchInput extends React.PureComponent {
 export default SearchInput;
 
 SearchInput.propTypes = {
-  // searchValue: PropTypes.string.isRequired,
   toggledClass: PropTypes.object.isRequired,
   setDropdownData: PropTypes.func.isRequired,
 };
