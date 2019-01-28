@@ -12,7 +12,23 @@ const input$ = new Subject();
 class SearchInput extends React.PureComponent {
   state = {
     searchValue: '',
+    cachedPropSearchValue: ''
   };
+
+  static getDerivedStateFromProps(nextProps, prevState){
+    const { searchValue: propSearchValue } = nextProps
+    const { cachedPropSearchValue } = prevState
+    console.log('prop', propSearchValue)
+    console.log('state', cachedPropSearchValue)
+    // if this and 
+    if ( cachedPropSearchValue !== propSearchValue ) {
+      return {
+        searchValue: propSearchValue,
+        cachedPropSearchValue: propSearchValue
+      }
+    }
+    return null
+  }
 
   componentDidMount() {
     // const { searchValue } = this.state;
@@ -72,4 +88,5 @@ export default SearchInput;
 SearchInput.propTypes = {
   toggledClass: PropTypes.object.isRequired,
   setDropdownData: PropTypes.func.isRequired,
+  searchValue: PropTypes.string
 };

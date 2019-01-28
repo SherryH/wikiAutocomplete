@@ -6,9 +6,9 @@ const DropdownSuggestion = ({
   classes, dropdownData, toggledClass, selectDropdown,
 }) => (
   <ul className={classNames(toggledClass, { [classes.dropdownWrapper]: true })}>
-    {dropdownData.map(dropdownList => (
-      <li key={dropdownList} onClick={() => selectDropdown(dropdownList)}>
-        {dropdownList}
+    {dropdownData.map(dropdownItem => (
+      <li key={dropdownItem} onClick={() => selectDropdown(dropdownItem)}>
+        {dropdownItem}
       </li>
     ))}
   </ul>
