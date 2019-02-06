@@ -1,6 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
+import memoize from "memoize-one";
 import { Subject } from 'rxjs';
 import {
   debounceTime, distinctUntilChanged, filter, switchMap,
@@ -12,26 +13,15 @@ const input$ = new Subject();
 class SearchInput extends React.PureComponent {
   state = {
     searchValue: '',
-    cachedPropSearchValue: ''
   };
 
-  static getDerivedStateFromProps(nextProps, prevState){
-    const { searchValue: propSearchValue } = nextProps
-    const { cachedPropSearchValue } = prevState
-    console.log('prop', propSearchValue)
-    console.log('state', cachedPropSearchValue)
-    // if this and 
-    if ( cachedPropSearchValue !== propSearchValue ) {
-      return {
-        searchValue: propSearchValue,
-        cachedPropSearchValue: propSearchValue
-      }
+  componentDidUpdate(prevProps) {
+    if (prevProps.searchValue !== this.props.searchValue){
+      this.setState({searchValue: this.props.searchValue})
     }
-    return null
   }
 
   componentDidMount() {
-    // const { searchValue } = this.state;
     const { setDropdownData } = this.props;
     input$
       .pipe(
@@ -40,6 +30,7 @@ class SearchInput extends React.PureComponent {
         debounceTime(500),
       )
       .subscribe((searchValue) => {
+        console.log('componentDidmount')
         this.getJsonpAsync(searchValue).then((dropdownData) => {
           setDropdownData(dropdownData);
         });
@@ -54,6 +45,7 @@ class SearchInput extends React.PureComponent {
   };
 
   getJsonpAsync = term => new Promise((resolve, reject) => {
+    console.log('searchinput jsonp', jsonp)
     const url = `https://en.wikipedia.org/w/api.php?action=opensearch&format=json&formatversion=2&search=${term}&namespace=0&limit=10&suggest=true`;
     jsonp(url, (err, data) => {
       if (err) {
@@ -63,16 +55,12 @@ class SearchInput extends React.PureComponent {
     });
   });
 
-  // onClick of a dropdown search result, SearchContainer.selectDropdown
-  // set the selectDropdown to be the state.searchValue here
-  // setState triggered by parent component SearchContainer.js
-  // componentWillReceiveProps! see what the current impl is
-
   render() {
-    const { toggledClass } = this.props;
+    const { toggledClass, searchValue: propSearchValue } = this.props;
     const { searchValue } = this.state;
     return (
       <input
+        data-testid="searchInput"
         id="searchInput"
         onChange={this.handleChange}
         value={searchValue}

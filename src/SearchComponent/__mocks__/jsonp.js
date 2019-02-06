@@ -4,4 +4,4 @@ const jsonp = jest.fn((url, callback) => {
   callback(null, jsonpData);
 });
 
-export default jsonp;
+module.exports=jsonp;

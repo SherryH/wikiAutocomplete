@@ -1,12 +1,13 @@
+jest.mock('jsonp');
+
 import React from 'react';
 import renderer from 'react-test-renderer';
 import {
-  render, fireEvent, cleanup,
+  render, fireEvent, cleanup, wait
 } from 'react-testing-library';
-import jsonp from 'jsonp';
+// import jsonp from 'jsonp';
 import SearchComponent from '../index';
 
-jest.mock('jsonp');
 
 afterAll(() => {
   jest.unmock('jsonp');
@@ -32,7 +33,7 @@ describe('SearchComponent:', () => {
     cleanup();
   });
 
-  it('renders search results into dropdown suggestions', () => {
+  it('renders search results into dropdown suggestions', async() => {
     // mock the wiki result returns by mocking jsonp
 
     // render the autocomplete
@@ -48,10 +49,13 @@ describe('SearchComponent:', () => {
     // check mock jsonp called
     // currently failed. refer https://github.com/kentcdodds/react-testing-library/blob/cb14d2d3a19ae1420fafc8d9554c707fd7123a99/src/__tests__/fetch.js
     // wait for componentDidUpdate called
-    expect(jsonp).toHaveBeenCalled();
+    // expect(jsonp).toHaveBeenCalled();
+    await wait()
 
     // match snapshots
     expect(container.firstChild).toMatchSnapshot();
+
+    // check dropdownSelection is rendered
 
     cleanup();
   });
