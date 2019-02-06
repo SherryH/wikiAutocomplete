@@ -102,10 +102,10 @@ class SearchContainer extends React.Component {
     });
   };
 
-  selectDropdown = (dropdownList) => {
-    this.setState({ searchValue: dropdownList, dropdownData: [] });
+  selectDropdown = (dropdownItem) => {
+    this.setState({ searchValue: dropdownItem, dropdownData: [] });
     // TODO: cursor still not displayed
-    if (this.searchInputRef) this.searchInputRef.current.focus();
+    // if (this.searchInputRef) this.searchInputRef.current.focus();
   }
 
   getSearchInput = (searchInputRef) => {
