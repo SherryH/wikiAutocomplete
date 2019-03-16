@@ -13,6 +13,7 @@ class SearchContainer extends React.Component {
     this.searchInputSubscriber = null;
     this.wikiSubscriber = null;
     this.searchInputRef = null;
+    console.log('constructor called');
   }
 
   state = {
@@ -23,7 +24,7 @@ class SearchContainer extends React.Component {
   };
 
 
-  componentDidUpdate() {
+  xcomponentDidMount() {
     const { searchValue } = this.state;
     console.log('componentDidUpdate in test? ', this.searchInput$);
     if (!this.searchInput$) return;
@@ -50,7 +51,7 @@ class SearchContainer extends React.Component {
       });
   }
 
-  componentWillUnmount() {
+  xcomponentWillUnmount() {
     if (this.searchInputSubscriber) this.searchInputSubscriber.unsubscribe();
     if (this.wikiSubscriber) this.wikiSubscriber.unsubscribe();
   }
@@ -83,6 +84,7 @@ class SearchContainer extends React.Component {
           observer.complete();
         }
       };
+      console.log('getWikiObservable called');
       jsonp(url, jsonPFunc);
 
       return function dispose() {
@@ -95,14 +97,15 @@ class SearchContainer extends React.Component {
     if (!this.searchInput$) {
       this.searchInput$ = searchInput$;
     }
+    console.log('onChange called');
     this.setState({ searchValue: event.target.value }, () => {
     });
   };
 
-  selectDropdown = (dropdownList) => {
-    this.setState({ searchValue: dropdownList, dropdownData: [] });
+  selectDropdown = (dropdownItem) => {
+    this.setState({ searchValue: dropdownItem, dropdownData: [] });
     // TODO: cursor still not displayed
-    if (this.searchInputRef) this.searchInputRef.current.focus();
+    // if (this.searchInputRef) this.searchInputRef.current.focus();
   }
 
   getSearchInput = (searchInputRef) => {
@@ -110,6 +113,10 @@ class SearchContainer extends React.Component {
     // passed through in onChange or another place?
     // Note: constructor() doesnt work as SearchBox not yet exist when SearchContainer defined
   };
+
+  setDropdownData = (dropdownData) => {
+    this.setState({ dropdownData });
+  }
 
 
   getStateAndHelpers() {
@@ -123,6 +130,7 @@ class SearchContainer extends React.Component {
       searchValue,
       getSearchInput: this.getSearchInput,
       dropdownData,
+      setDropdownData: this.setDropdownData,
       selectDropdown: this.selectDropdown,
     };
   }

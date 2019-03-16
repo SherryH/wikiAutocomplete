@@ -7,6 +7,7 @@ import { withStyles } from '@material-ui/core/styles';
 import onhandleClickOutside from 'react-onclickoutside';
 import { fromEvent } from 'rxjs';
 import DropdownSuggestion from './DropdownSuggestion';
+import SearchInput from './SearchInput';
 
 const primaryBlue = '#1eaddc';
 
@@ -88,6 +89,7 @@ const SearchBox = (props) => {
     searchValue,
     getSearchInput,
     dropdownData,
+    setDropdownData,
     selectDropdown,
   } = props;
 
@@ -116,8 +118,9 @@ const SearchBox = (props) => {
         >
           <Search className={classNames(classes.icon, { open: isOpen })} />
         </IconButton>
-        <input
+        {/* <input
           id="searchInput"
+          data-testid="searchInput"
           ref={searchInputRef}
           onChange={(event) => {
             onChange(event, searchInput$);
@@ -125,6 +128,11 @@ const SearchBox = (props) => {
           value={searchValue}
           className={classNames(toggledClass)}
           placeholder="Start Wiki Search..."
+        /> */}
+        <SearchInput
+          searchValue={searchValue}
+          toggledClass={toggledClass}
+          setDropdownData={setDropdownData}
         />
         {dropdownData && dropdownData.length > 0 && (
           <DropdownSuggestion
