@@ -1,7 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import memoize from "memoize-one";
+import memoize from 'memoize-one';
 import { Subject } from 'rxjs';
 import {
   debounceTime, distinctUntilChanged, filter, switchMap,
@@ -16,8 +16,8 @@ class SearchInput extends React.PureComponent {
   };
 
   componentDidUpdate(prevProps) {
-    if (prevProps.searchValue !== this.props.searchValue){
-      this.setState({searchValue: this.props.searchValue})
+    if (prevProps.searchValue !== this.props.searchValue) {
+      this.setState({ searchValue: this.props.searchValue });
     }
   }
 
@@ -30,7 +30,7 @@ class SearchInput extends React.PureComponent {
         debounceTime(500),
       )
       .subscribe((searchValue) => {
-        console.log('componentDidmount')
+        console.log('componentDidmount');
         this.getJsonpAsync(searchValue).then((dropdownData) => {
           setDropdownData(dropdownData);
         });
@@ -40,12 +40,13 @@ class SearchInput extends React.PureComponent {
   handleChange = (event) => {
     this.setState({ searchValue: event.target.value }, () => {
       const { searchValue } = this.state;
+      console.log('searchValue', searchValue);
       input$.next(searchValue);
     });
   };
 
   getJsonpAsync = term => new Promise((resolve, reject) => {
-    console.log('searchinput jsonp', jsonp)
+    console.log('searchinput jsonp', jsonp);
     const url = `https://en.wikipedia.org/w/api.php?action=opensearch&format=json&formatversion=2&search=${term}&namespace=0&limit=10&suggest=true`;
     jsonp(url, (err, data) => {
       if (err) {
@@ -76,5 +77,5 @@ export default SearchInput;
 SearchInput.propTypes = {
   toggledClass: PropTypes.object.isRequired,
   setDropdownData: PropTypes.func.isRequired,
-  searchValue: PropTypes.string
+  searchValue: PropTypes.string,
 };

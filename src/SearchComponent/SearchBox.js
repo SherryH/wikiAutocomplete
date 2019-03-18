@@ -2,10 +2,9 @@ import React from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { Search } from '@material-ui/icons';
-import { TextField, IconButton, SvgIcon } from '@material-ui/core';
+import { IconButton } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import onhandleClickOutside from 'react-onclickoutside';
-import { fromEvent } from 'rxjs';
 import DropdownSuggestion from './DropdownSuggestion';
 import SearchInput from './SearchInput';
 
@@ -79,15 +78,17 @@ const useStyles = withStyles({
   },
 });
 
+const searchWiki = (term) => {
+  const url = `https://en.wikipedia.org/w/index.php?search=${encodeURI(term)}`;
+  window.open(url, '_blank');
+};
+
 const SearchBox = (props) => {
   const {
     classes,
     isOpen,
     onClick,
-    searchWiki,
-    onChange,
     searchValue,
-    getSearchInput,
     dropdownData,
     setDropdownData,
     selectDropdown,
@@ -95,14 +96,6 @@ const SearchBox = (props) => {
 
   const toggledClass = { [classes.open]: isOpen, [classes.closed]: !isOpen };
 
-  // reference to SearchBox
-  const searchInput = document.getElementById('searchInput');
-  // TODO: investigate how to refer to DOM using ref. Where to refactor to
-  const searchInputRef = React.createRef();
-  getSearchInput(searchInputRef);
-  // const searchInput = searchInputRef.current;
-  // console.log('searchInput', searchInput, searchInputRef);
-  const searchInput$ = fromEvent(searchInput, 'keyup');
   return (
     <React.Fragment>
       <form
@@ -118,17 +111,6 @@ const SearchBox = (props) => {
         >
           <Search className={classNames(classes.icon, { open: isOpen })} />
         </IconButton>
-        {/* <input
-          id="searchInput"
-          data-testid="searchInput"
-          ref={searchInputRef}
-          onChange={(event) => {
-            onChange(event, searchInput$);
-          }}
-          value={searchValue}
-          className={classNames(toggledClass)}
-          placeholder="Start Wiki Search..."
-        /> */}
         <SearchInput
           searchValue={searchValue}
           toggledClass={toggledClass}
@@ -164,6 +146,9 @@ export default onhandleClickOutside(useStyles(SearchBox), {
 SearchBox.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClick: PropTypes.func.isRequired,
+  setDropdownData: PropTypes.func.isRequired,
+  selectDropdown: PropTypes.func.isRequired,
+  searchValue: PropTypes.string.isRequired,
   handleClickOutside: PropTypes.func.isRequired,
   classes: PropTypes.any,
   dropdownData: PropTypes.arrayOf(PropTypes.string),
