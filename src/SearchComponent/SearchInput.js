@@ -25,7 +25,6 @@ class SearchInput extends React.PureComponent {
     const { setDropdownData } = this.props;
     input$
       .pipe(
-        filter(searchValue => searchValue.length > 0),
         distinctUntilChanged(),
         debounceTime(500),
       )
