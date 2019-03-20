@@ -23,15 +23,6 @@ class SearchContainer extends React.Component {
     }));
   };
 
-  getJsonpAsync = (term, url) => new Promise((resolve, reject) => {
-    jsonp(url, (err, data) => {
-      if (err) {
-        reject(err);
-      }
-      resolve(data[1]);
-    });
-  });
-
   setDropdownData = (dropdownData) => {
     this.setState({ dropdownData });
   };

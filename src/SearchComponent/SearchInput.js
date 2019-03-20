@@ -1,25 +1,18 @@
 import React from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import memoize from 'memoize-one';
 import { Subject } from 'rxjs';
 import {
-  debounceTime, distinctUntilChanged, filter, switchMap,
+  debounceTime, distinctUntilChanged,
 } from 'rxjs/operators';
 import jsonp from 'jsonp';
 
-const input$ = new Subject();
+export const input$ = new Subject();
 
 class SearchInput extends React.PureComponent {
   state = {
     searchValue: '',
   };
-
-  componentDidUpdate(prevProps) {
-    if (prevProps.searchValue !== this.props.searchValue) {
-      this.setState({ searchValue: this.props.searchValue });
-    }
-  }
 
   componentDidMount() {
     const { setDropdownData } = this.props;
@@ -29,23 +22,26 @@ class SearchInput extends React.PureComponent {
         debounceTime(500),
       )
       .subscribe((searchValue) => {
-        console.log('componentDidmount');
         this.getJsonpAsync(searchValue).then((dropdownData) => {
           setDropdownData(dropdownData);
         });
       });
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.searchValue !== this.props.searchValue) {
+      this.setState({ searchValue: this.props.searchValue });
+    }
+  }
+
   handleChange = (event) => {
     this.setState({ searchValue: event.target.value }, () => {
       const { searchValue } = this.state;
-      console.log('searchValue', searchValue);
       input$.next(searchValue);
     });
   };
 
   getJsonpAsync = term => new Promise((resolve, reject) => {
-    console.log('searchinput jsonp', jsonp);
     const url = `https://en.wikipedia.org/w/api.php?action=opensearch&format=json&formatversion=2&search=${term}&namespace=0&limit=10&suggest=true`;
     jsonp(url, (err, data) => {
       if (err) {
@@ -56,7 +52,7 @@ class SearchInput extends React.PureComponent {
   });
 
   render() {
-    const { toggledClass, searchValue: propSearchValue } = this.props;
+    const { toggledClass } = this.props;
     const { searchValue } = this.state;
     return (
       <input
@@ -74,7 +70,13 @@ class SearchInput extends React.PureComponent {
 export default SearchInput;
 
 SearchInput.propTypes = {
-  toggledClass: PropTypes.object.isRequired,
-  setDropdownData: PropTypes.func.isRequired,
+  toggledClass: PropTypes.object,
+  setDropdownData: PropTypes.func,
   searchValue: PropTypes.string,
+};
+
+SearchInput.defaultProps = {
+  toggledClass: {},
+  setDropdownData: () => {},
+  searchValue: '',
 };
