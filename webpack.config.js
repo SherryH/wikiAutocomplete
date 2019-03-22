@@ -1,4 +1,5 @@
 const HtmlWebPackPlugin = require('html-webpack-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 const htmlPlugin = new HtmlWebPackPlugin({
   template: './src/index.html',
@@ -21,5 +22,13 @@ module.exports = {
   plugins: [htmlPlugin],
   devServer: {
     disableHostCheck: true,
+  },
+  optimization: {
+    minimize: true,
+    minimizer: [
+      new UglifyJsPlugin(),
+    ],
+    usedExports: true,
+    sideEffects: true,
   },
 };

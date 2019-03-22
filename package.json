@@ -7,6 +7,7 @@
     "start": "webpack-dev-server --open --mode development",
     "build": "webpack --mode production",
     "test": "jest",
+    "cypress:open": "cypress open",
     "deploy": "npm run build && aws s3 cp dist/ s3://sherryhsu.name --recursive"
   },
   "jest": {
@@ -25,9 +26,10 @@
     "@babel/preset-react": "^7.0.0",
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
-    "babel-jest": "^23.6.0",
+    "babel-jest": "^24.5.0",
     "babel-loader": "^8.0.4",
     "clean-webpack-plugin": "^1.0.0",
+    "cypress": "^3.2.0",
     "eslint": "^5.11.0",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-plugin-import": "^2.14.0",
@@ -35,7 +37,7 @@
     "eslint-plugin-jsx-a11y": "^6.1.2",
     "eslint-plugin-react": "^7.11.1",
     "html-webpack-plugin": "^3.2.0",
-    "jest": "^23.6.0",
+    "jest": "^24.5.0",
     "react-test-renderer": "^16.7.0",
     "react-testing-library": "^5.4.4",
     "regenerator-runtime": "^0.13.1",
@@ -53,6 +55,7 @@
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "react-onclickoutside": "^6.7.1",
-    "rxjs": "^6.3.3"
+    "rxjs": "^6.3.3",
+    "uglifyjs-webpack-plugin": "^2.1.2"
   }
 }
