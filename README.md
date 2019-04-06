@@ -13,6 +13,9 @@ This autocomplete widget design was taken from inspiration of [this codepen](htt
 - Material-UI
 - RxJS
 - Eslint
+- Jest
+- Cypress
+- Cucumber
 
 This project was done with the aim to practice React render props pattern, Observables and JSS.
 
